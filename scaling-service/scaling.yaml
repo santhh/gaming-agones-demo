@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: custom-fleet-scaler
+  name: custom-fleet-scaler
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: custom-fleet-scaler
+  template:
+    metadata:
+      labels:
+        run: custom-fleet-scaler
+    spec:
+      serviceAccount: fleet-scaler
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - ./home/service/service --interval=30 --defaultReplica=4 --namespace=$(NAMESPACE) --metricType=$(METRICS_TYPE) --fleetName=$(FLEET_NAME) --fasName=$(FAS_NAME)
+        #TODO(plecuyer): Dynamic reference for image for CI/CD build.
+        image: gcr.io/agones-poc/agones-scaling-service:v36
+        name: agones-scaling-service
+        resources:
+          requests:
+            cpu: 100m
+        env:
+          - name: METRICS_TYPE
+            value: custom.googleapis.com/gameservers/playercount
+          - name: FLEET_NAME
+            value: my-game-server-fleet
+          - name: FAS_NAME
+            value: fleet-autoscaler-my-game-server  
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace    
+        

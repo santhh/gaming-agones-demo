@@ -1,0 +1,4 @@
+grpcio==1.15.0
+grpcio-tools==1.15.0
+futures==3.2.0
+Pyrebase==3.0.27

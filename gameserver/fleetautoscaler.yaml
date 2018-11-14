@@ -1,0 +1,37 @@
+# Copyright 2018 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: "stable.agones.dev/v1alpha1"
+kind: FleetAutoscaler
+metadata:
+
+  name: fleet-autoscaler-my-game-server
+spec:
+
+  fleetName: my-game-server-fleet
+
+  policy:
+    type: Buffer
+    buffer:
+      # Size of a buffer of "ready" game server instances
+      # The FleetAutoscaler will scale the fleet up and down trying to maintain this buffer, 
+      # as instances are being allocated or terminated
+      # it can be specified either in absolute (i.e. 5) or percentage format (i.e. 5%)
+      bufferSize: 5
+      # minimum fleet size to be set by this FleetAutoscaler. 
+      # if not specified, the actual minimum fleet size will be bufferSize
+      minReplicas: 6
+      # maximum fleet size that can be set by this FleetAutoscaler
+      # required
+      maxReplicas: 50

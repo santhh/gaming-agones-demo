@@ -1,0 +1,50 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "doc.go",
+        "fleet.go",
+        "fleetallocation.go",
+        "fleetautoscaler.go",
+        "gameserver.go",
+        "gameserverset.go",
+        "register.go",
+        "zz_generated.deepcopy.go",
+    ],
+    importpath = "agones.dev/agones/pkg/apis/stable/v1alpha1",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/apis/stable:go_default_library",
+        "//pkg/util/runtime:go_default_library",
+        "@com_github_pkg_errors//:go_default_library",
+        "@io_k8s_api//apps/v1:go_default_library",
+        "@io_k8s_api//core/v1:go_default_library",
+        "@io_k8s_apimachinery//pkg/apis/meta/v1:go_default_library",
+        "@io_k8s_apimachinery//pkg/labels:go_default_library",
+        "@io_k8s_apimachinery//pkg/runtime:go_default_library",
+        "@io_k8s_apimachinery//pkg/runtime/schema:go_default_library",
+        "@io_k8s_apimachinery//pkg/util/intstr:go_default_library",
+        "@io_k8s_client_go//kubernetes/scheme:go_default_library",
+    ],
+)
+
+go_test(
+    name = "go_default_test",
+    srcs = [
+        "fleet_test.go",
+        "fleetallocation_test.go",
+        "fleetautoscaler_test.go",
+        "gameserver_test.go",
+        "gameserverset_test.go",
+    ],
+    embed = [":go_default_library"],
+    deps = [
+        "//pkg/apis/stable:go_default_library",
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@io_k8s_api//apps/v1:go_default_library",
+        "@io_k8s_api//core/v1:go_default_library",
+        "@io_k8s_apimachinery//pkg/apis/meta/v1:go_default_library",
+        "@io_k8s_apimachinery//pkg/util/intstr:go_default_library",
+    ],
+)

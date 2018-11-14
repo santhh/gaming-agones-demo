@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: esp-grpc-auth
+spec:
+  ports:
+  - port: 80
+    targetPort: 9000
+    protocol: TCP
+    name: http
+  selector:
+    app: esp-grpc-auth
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: esp-grpc-auth
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: esp-grpc-auth
+    spec:
+      containers:
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:1
+        args: [
+          "--http2_port=9000",
+          "--backend=grpc://127.0.0.1:50051",
+          "--service=gs-auth-api.endpoints.agones-poc.cloud.goog",
+          "--rollout_strategy=managed",
+        ]
+        ports:
+          - containerPort: 9000
+      - name: python-esp-grpc-auth
+        image: gcr.io/agones-poc/gs_auth:v1
+        ports:
+          - containerPort: 50051

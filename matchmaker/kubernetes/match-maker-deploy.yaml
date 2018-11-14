@@ -1,0 +1,42 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata: 
+  name: gaming-matchmaker
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: gaming-matchmaker
+  template: 
+    metadata: 
+      labels: 
+        app: gaming-matchmaker
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: max_users
+              valueFrom: 
+                configMapKeyRef: 
+                  key: max_users
+                  name: gaming-matchmaker-config
+            - 
+              name: allocation_service_url
+              valueFrom: 
+                configMapKeyRef: 
+                  key: allocation_service_url
+                  name: gaming-matchmaker-config
+            - 
+              name: data_store_kind
+              valueFrom: 
+                configMapKeyRef: 
+                  key: data_store_kind
+                  name: gaming-matchmaker-config
+          image: "gcr.io/agones-poc/gaming-matchmaker-service:V8"
+          imagePullPolicy: IfNotPresent
+          name: gaming-matchmaker-api
+          ports: 
+            - 
+              containerPort: 8080
+

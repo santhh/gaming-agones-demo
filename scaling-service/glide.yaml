@@ -1,0 +1,4 @@
+package: github.com/santhh/gaming-scaling-service # e.g. github.com/foo/bar
+import:
+- package: k8s.io/client-go
+  version: v8.0.0

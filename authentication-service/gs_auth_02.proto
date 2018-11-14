@@ -1,0 +1,91 @@
+// TODO (Patrick): (COPYRIGHT NOTICE)
+
+// Definitions for Game Authentication service
+
+syntax = "proto3";
+
+import "google/api/annotations.proto"; 
+
+service GameserverAuthentication {
+  rpc RegisterPlayer (PlayerRegistrationRequest) returns (PlayerRegistrationResponse) {
+    option (google.api.http) = {
+      post: "/createplayer" 
+      body: "*"
+    };  
+  }
+  rpc LoginPlayer (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/loginplayer" 
+      body: "*"
+    };
+  }
+  rpc LogoutPlayer(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = { put: "/logout/{email}" };
+  }
+  rpc GetPlayerInfo (PlayerInfoRequest) returns (PlayerInfoResponse) {
+    option (google.api.http) = { get: "/getplayerinfo/{idToken}" };
+  }
+  rpc AuthenticationTokenRefresh (AuthenticationTokenRefreshRequest) returns (AuthenticationTokenRefreshResponse) {
+    option (google.api.http) = { get: "/authenticationtokenrefresh/{idToken}" };
+  }
+  rpc UpdateActivity(UpdateActivityRequest) returns (UpdateActivityResponse) {
+    option (google.api.http) = { get: "/updateactivity/{email}" };
+  }
+}
+
+
+message PlayerRegistrationRequest{
+  string email = 1;
+  string password = 2;
+}
+
+message PlayerRegistrationResponse{
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string idToken = 1;
+  string email = 2;
+  string refToken = 3;
+  bool loggedIn = 4;
+  float time = 5;
+}
+
+message LogoutRequest{
+  string email = 1;
+}
+
+message LogoutResponse{
+}
+
+message PlayerInfoRequest {
+  string idToken = 1;
+}
+
+message PlayerInfoResponse{
+  string email = 1;
+  string passwordUpdatedAt = 2;
+  string emailVerified = 3;
+  bool presence = 4;
+  float lastActivity = 5;
+}
+
+message AuthenticationTokenRefreshRequest{
+  string idToken = 1;
+}
+
+message AuthenticationTokenRefreshResponse{
+  string idToken = 1;
+}
+
+message UpdateActivityRequest{
+  string email = 1;
+}
+
+message UpdateActivityResponse{
+}
+

@@ -1,0 +1,35 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:resolve go agones.dev/agones/vendor/grpc-gateway/runtime/internal @com_github_grpc_ecosystem_grpc_gateway//runtime/internal:go_default_library
+# gazelle:exclude vendor
+gazelle(
+    name = "gazelle",
+    external = "external",
+    prefix = "agones.dev/agones",
+)
+
+proto_library(
+    name = "sdk_proto",
+    srcs = ["sdk.proto"],
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_proto"],
+)
+
+go_proto_library(
+    name = "sdk_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "agones.dev/agones",
+    proto = ":sdk_proto",
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_go_proto"],
+)
+
+go_library(
+    name = "go_default_library",
+    srcs = ["doc.go"],
+    embed = [":sdk_go_proto"],
+    importpath = "agones.dev/agones",
+    visibility = ["//visibility:public"],
+)

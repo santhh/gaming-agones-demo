@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.google.swarm.matchmaker.service</groupId>
+	<artifactId>gaming-matchmaker-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>gaming-matchmaker-service</name>
+	<description>Match Maker Service</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<maven.build.image.name>${project.artifactId}</maven.build.image.name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+	        <groupId>s2.libs</groupId>
+	        <artifactId>s2.libs</artifactId>
+	        <scope>system</scope>
+	        <version>1.0</version>
+	        <systemPath>${basedir}/src/main/resources/lib/s2-geometry-java.jar</systemPath>
+    	</dependency>
+    	<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>22.0</version>
+		</dependency>
+ 	<dependency>
+	     <groupId>com.google.api-client</groupId>
+	     <artifactId>google-api-client-appengine</artifactId>
+	     <version>1.23.0</version>
+     <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava-jdk5</artifactId>
+       </exclusion>
+    </exclusions>
+ </dependency>
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>com.google.cloud</groupId>
+		  <artifactId>google-cloud-datastore</artifactId>
+		  <version>1.51.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				 <configuration>
+    				<includeSystemScope>true</includeSystemScope>
+ 			    </configuration>
+			</plugin>
+			<plugin>
+				  <groupId>com.google.cloud.tools</groupId>
+				  <artifactId>jib-maven-plugin</artifactId>
+				  <version>0.9.0</version>
+				  <configuration>
+				    <to>
+				      <image>gcr.io/${project_id}/${maven.build.image.name}:${image_tag}</image>
+				       <credHelper>gcr</credHelper>
+				    </to>
+				  </configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

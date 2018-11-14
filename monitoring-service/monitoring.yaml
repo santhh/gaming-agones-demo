@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: custom-metric-sd
+  name: custom-metric-sd
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: custom-metric-sd
+  template:
+    metadata:
+      labels:
+        run: custom-metric-sd
+    spec:
+      serviceAccount: fleet-allocator
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - ./home/service/service --pod-name=$(POD_NAME) --namespace=$(NAMESPACE) --interval=30  --fleetName=$(FLEET_NAME)
+        #TODO(plecuyer): Dynamic reference for image for CI/CD build.
+        image: gcr.io/agones-poc/agones-monitoring-service:v8
+        name: agones-monitoring-service
+        resources:
+          requests:
+            cpu: 100m
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: FLEET_NAME
+            value: my-game-server-fleet
+
+ 
