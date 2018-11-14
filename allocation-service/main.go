@@ -1,3 +1,17 @@
+// Copyright 2018 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package main
 
 import (
@@ -6,19 +20,20 @@ import (
 	"agones.dev/agones/pkg/util/runtime" // for the logger
 	"encoding/json"
 	"errors"
+	"flag"
 	"io"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 	"net/http"
 )
 
-const namespace = "default"
-const fleetname = "my-game-server-fleet"
-const generatename = "masud-gserver-"
+const generatename = "canada-swarm-gameserver-"
 
 var (
 	logger       = runtime.NewLoggerWithSource("main")
 	agonesClient = getAgonesClient()
+	namespace    string
+	fleetname    string
 )
 
 // A handler for the web server
@@ -32,34 +47,33 @@ type result struct {
 // Main will set up an http server, fetch the ip and port of the allocated
 // gameserver set, and return json a string of GameServerStatus
 func main() {
+
+	flag.StringVar(&namespace, "namespace", "default", "namespace")
+	flag.StringVar(&fleetname, "fleetName", "my-game-server-fleet", "agones game server fleet")
+	flag.Parse()
 	// Serve 200 status on / for k8s health checks
 	http.HandleFunc("/", handleRoot)
 	logger.Info("****Custom Log:* handle root completed***")
-
 	// Serve 200 status on /healthz for k8s health checks
 	http.HandleFunc("/healthz", handleHealthz)
 	logger.Info("****Custom Log:* handle health completed***")
-
 	// Return the GameServerStatus of the allocated replica to the authorized client
 	http.HandleFunc("/address", getOnly(basicAuth(handleAddress)))
-
 	logger.Info("****Custom Log:* handle data completed***")
 
-	// Run the HTTP server using the bound certificate and key for TLS
-	if err := http.ListenAndServeTLS(":8000", "/home/service/certs/tls.crt", "/home/service/certs/tls.key", nil); err != nil {
-		logger.WithError(err).Fatal("HTTPS server failed to run")
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		logger.WithError(err).Fatal("HTTP server failed to run")
 	} else {
-		logger.Info("HTTPS server is running on port 8000")
+		logger.Info("HTTP server is running on port 8000")
 	}
-}
 
+}
 func getAgonesClient() *versioned.Clientset {
 	// Create the in-cluster config
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		logger.WithError(err).Fatal("Could not create in cluster config")
 	}
-
 	// Access to the Agones resources through the Agones Clientset
 	agonesClient, err := versioned.NewForConfig(config)
 	if err != nil {
@@ -133,8 +147,10 @@ func checkReadyReplicas() int32 {
 	fleetInterface := agonesClient.StableV1alpha1().Fleets(namespace)
 	// Get our fleet
 	fleet, err := fleetInterface.Get(fleetname, v1.GetOptions{})
+
 	if err != nil {
 		logger.WithError(err).Info("Get fleet failed")
+
 	}
 
 	return fleet.Status.ReadyReplicas
@@ -143,22 +159,18 @@ func checkReadyReplicas() int32 {
 // Move a replica from ready to allocated and return the GameServerStatus
 func allocate() (v1alpha1.GameServerStatus, error) {
 	var result v1alpha1.GameServerStatus
-
 	// Log the values used in the fleet allocation
 	logger.WithField("namespace", namespace).Info("namespace for fa")
 	logger.WithField("generatename", generatename).Info("generatename for fa")
 	logger.WithField("fleetname", fleetname).Info("fleetname for fa")
-
 	// Find out how many ready replicas the fleet has
 	readyReplicas := checkReadyReplicas()
 	logger.WithField("readyReplicas", readyReplicas).Info("numer of ready replicas")
-
 	// Return and log an error if there are no ready replicas
 	if readyReplicas < 1 {
 		logger.WithField("fleetname", fleetname).Info("Insufficient ready replicas, cannot create fleet allocation")
 		return result, errors.New("Insufficient ready replicas, cannot create fleet allocation")
 	}
-
 	// Get a FleetAllocationInterface for this namespace
 	fleetAllocationInterface := agonesClient.StableV1alpha1().FleetAllocations(namespace)
 
@@ -169,19 +181,14 @@ func allocate() (v1alpha1.GameServerStatus, error) {
 		},
 		Spec: v1alpha1.FleetAllocationSpec{FleetName: fleetname},
 	}
-
 	// Create a new fleet allocation
-
 	newFleetAllocation, err := fleetAllocationInterface.Create(fa)
-
 	if err != nil {
 		// Return and log the error
 		logger.WithError(err).Info("Failed to create fleet allocation")
 		return result, errors.New("Failed to ceate fleet allocation")
 	}
-
 	logger.WithField("Result", newFleetAllocation).Info("Pre Result Check for Status")
 	result = newFleetAllocation.Status.GameServer.Status
-
 	return result, nil
 }

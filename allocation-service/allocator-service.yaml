@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: fleet-allocator-backend
   annotations:
-    service.alpha.kubernetes.io/app-protocols: '{"https":"HTTPS"}'
+    service.alpha.kubernetes.io/app-protocols: '{"http":"HTTP"}'
   labels:
     app: fleet-allocator
 spec:
@@ -19,7 +19,7 @@ spec:
 
 ---
 # Deploy a pod to run the fleet-allocator code
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: fleet-allocator
@@ -37,25 +37,27 @@ spec:
         app: fleet-allocator
     spec:
       serviceAccount: fleet-allocator
-      volumes:
-      - name: secret-volume
-        secret:
-          secretName: allocatorw3secret
       containers:
-      - name: fleet-allocator
-        image: gcr.io/agones-poc/agones-allocation-service:v12
-        #image: index.docker.io/exampleuser/allocator-service:simple-udp-5
+      - command:
+        - /bin/sh
+        - -c
+        - ./home/service/service --namespace=$(NAMESPACE) --fleetName=$(FLEET_NAME)
+      
+        name: fleet-allocator
+        image: gcr.io/agones-poc/agones-allocation-service:v19
         imagePullPolicy: Always
+        env:
+         - name: NAMESPACE
+           value: default
+         - name: FLEET_NAME
+           value: my-game-server-fleet
         ports:
         - name: fleet-allocator
           containerPort: 8000
         livenessProbe:
           httpGet:
-            scheme: HTTPS
+            scheme: HTTP
             path: /healthz
             port: 8000
           initialDelaySeconds: 3
           periodSeconds: 5
-        volumeMounts:
-        - mountPath: /home/service/certs
-          name: secret-volume

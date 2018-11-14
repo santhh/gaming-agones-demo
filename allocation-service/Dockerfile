@@ -31,7 +31,7 @@ FROM alpine:3.7
 ENV GOPATH=/Users/masudhasan/Documents/workspace-sts-3.9.5.RELEASE/go
 RUN apk add --update ca-certificates
 RUN adduser -D service
-COPY --from=builder $GOPATH/src/github.com/santhh/allocator-service \
+COPY --from=builder $GOPATH/src/github.com/santhh/gaming-allocation-service \
                     /home/service
 RUN chown -R service /home/service && \
     chmod o+x /home/service/service
