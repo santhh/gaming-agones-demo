@@ -1,8 +1,8 @@
 # Getting Started with Gaming Demo
 
-This project contains sample code to implement a gaming architecture in GKE. It uses dedicated game server agones, stackdriver and a custom match maker service to replicate a scalable architecture.  
+This project contains sample code to implement a gaming architecture in GKE. It uses dedicated game server agones, stackdriver and a custom match maker service to replicate a scalable architecture.
 
-![image](https://screenshot.googleplex.com/NGeTRp3cKkt.png)
+![gaming-arch](https://user-images.githubusercontent.com/27572451/50616082-00fd9900-0eb5-11e9-9ca1-1f2662c1bfef.png)
 
 ### Step: 1 Understanding Agones Custom Resource Definition In Kubernetes
 
