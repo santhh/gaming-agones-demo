@@ -138,7 +138,7 @@ PLIST
 2018/11/05 16:19:04 ***Player Count 19 *** Ready Replicas 0 Error:<nil>
 2018/11/05 16:19:04 **Auto Scaling Should Trigger*** Target Buffer: 5 Current Buffer: 4
 2018/11/05 16:19:04 Namespace: %v Fleet: %v Fleet Auto Scaler: %vdefaultmy-game-server-fleetfleet-autoscaler-my-game-server
-2018/11/05 16:19:04 ***Fleet Auto Scalar Created*** &{{ } {fleet-autoscaler-my-game-server  default /apis/stable.agones.dev/v1alpha1/namespaces/default/fleetautoscalers/fleet-autoscaler-my-game-server 836d4016-e116-11e8-b318-42010af00025 4269307 1 2018-11-05 16:19:04 +0000 UTC <nil> <nil> map[] map[] [{stable.agones.dev/v1alpha1 Fleet my-game-server-fleet b6279bb9-e115-11e8-b318-42010af00025 0xc42051b560 0xc42051b54f}] nil [] } {my-game-server-fleet {Buffer 0xc4201c3e30}} {0 0 <nil> false false}}
+2018/11/05 16:19:04 ***Fleet Auto Scalar Created***{fleet-autoscaler-my-game-server  default /apis/stable.agones.dev/v1alpha1/namespaces/default/fleetautoscalers/fleet-autoscaler-my-game-server 836d4016-e116-11e8-b318-42010af00025 4269307 1 2018-11-05 16:19:04 +0000 UTC <nil> <nil> map[] map[] [{stable.agones.dev/v1alpha1 Fleet my-game-server-fleet b6279bb9-e115-11e8-b318-42010af00025 0xc42051b560 0xc42051b54f}] nil [] } {my-game-server-fleet {Buffer 0xc4201c3e30}} {0 0 <nil> false false}}
 2018/11/05 16:19:04 Latest Resource Id: 4269307
 2018/11/05 16:19:04 Successfully Updated Buffer Size to 5
 
