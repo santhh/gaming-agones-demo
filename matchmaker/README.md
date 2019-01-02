@@ -117,10 +117,10 @@ These locations are close to each other and return same cell id and game server:
 
 Screen shot from datastore:
 
-![image](https://screenshot.googleplex.com/HGJeKSbfhR4.png)
+<img width="634" alt="hgjeksbfhr4" src="https://user-images.githubusercontent.com/27572451/50616291-d52ee300-0eb5-11e9-8547-75d80ab61039.png">
 
 
-![image](https://screenshot.googleplex.com/SytbB8UbtkY.png)
+<img width="1217" alt="sytbb8ubtky" src="https://user-images.githubusercontent.com/27572451/50616326-f42d7500-0eb5-11e9-9118-a9e46b8b96ec.png">
 
 
 
