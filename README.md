@@ -1,10 +1,10 @@
-##Getting Started with Gaming Demo
+# Getting Started with Gaming Demo
 
 This project contains sample code to implement a gaming architecture in GKE. It uses dedicated game server agones, stackdriver and a custom match maker service to replicate a scalable architecture.  
 
 ![image](https://screenshot.googleplex.com/NGeTRp3cKkt.png)
 
-###Step: 1 Understanding Agones Custom Resource Definition In Kubernetes
+### Step: 1 Understanding Agones Custom Resource Definition In Kubernetes
 
 [GameServer](https://github.com/GoogleCloudPlatform/agones/blob/master/docs/gameserver_spec.md)
 [Fleet](https://github.com/GoogleCloudPlatform/agones/blob/master/docs/fleet_spec.md)
@@ -12,12 +12,12 @@ This project contains sample code to implement a gaming architecture in GKE. It 
 We will be using these custom resources programmatically using kubernetes API from a go client sdk. Please see details [here](https://github.com/GoogleCloudPlatform/agones/blob/master/docs/access_api.md).
 
 
-###Step: 2 Install Agones in GKE Cluster
+### Step: 2 Install Agones in GKE Cluster
 
 Please follow this [instruction](https://github.com/GoogleCloudPlatform/agones/blob/master/install/README.md) to install Agones in GKE cluster
 
 
-###Step 3: Deploy Monitoring Service
+### Step 3: Deploy Monitoring Service
 
 Monitoring service uses [Custom Metrics Stackdriver Adapter](https://github.com/GoogleCloudPlatform/k8s-stackdriver/tree/master/custom-metrics-stackdriver-adapter). Please deploy new resource model adapter  by using following command:
 
@@ -40,7 +40,7 @@ bash-4.4$ kubectl logs custom-metric-sd-58f765cc4c-h282x
 ```
 
 
-###Step: 4 Deploy sample game server 
+### Step: 4 Deploy sample game server 
 
 Please follow instruction in the [game server repo](./gameserver/README.md)
 
@@ -70,7 +70,7 @@ http://localhost:8001/apis/stable.agones.dev/v1alpha1/namespaces/default/gameser
 
 ```
 
-###Step: 5 Deploy Allocation Service 
+### Step: 5 Deploy Allocation Service 
 
 Please follow instruction in the [allocation service repo](./allocation-service/README.md)
 
@@ -111,7 +111,7 @@ my-game-server-fleet-22jwr-nm2nw   Ready       35.184.39.67   [map[name:default 
 ```
 
 
-###Step 6: Deploy Custom Scaler Service
+### Step 6: Deploy Custom Scaler Service
 
 Please follow instruction in the [scaling service repo](./scaling-service/README.md) to complete the deployment.  
 
@@ -127,7 +127,7 @@ bash-4.4$ kubectl logs custom-fleet-scaler-7c9bc69c78-q2th2
 2018/11/17 02:16:52 **Auto Scaling Remain Same*** Target Buffer: 4 Current Buffer: 4
 ```
 
-###Step 7: Deploy Custom Matchmaker Service
+### Step 7: Deploy Custom Matchmaker Service
 
 Please follow instruction in the [matchmaker repo](./scaling-service/README.md) to complete the deployment.  
 
