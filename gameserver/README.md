@@ -181,12 +181,12 @@ https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.metricDescriptor
 ```
 Screenshot shows the parameter used to create playerCount custom metrics.
 
-![image](https://screenshot.googleplex.com/yeL6E3SRTGJ.png)
+<img width="1121" alt="yel6e3srtgj" src="https://user-images.githubusercontent.com/27572451/50616376-3d7dc480-0eb6-11e9-8fa8-5017674c74a8.png">
 
 
 Screen shot form the stack driver after the data is exported:
 
-![image](https://screenshot.googleplex.com/rxeF3zLk4Uw)
+<img width="547" alt="rxef3zlk4uw" src="https://user-images.githubusercontent.com/27572451/50616427-761d9e00-0eb6-11e9-8a37-4703bb8876fb.png">
 
 
 
